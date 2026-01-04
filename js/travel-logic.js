@@ -67,3 +67,14 @@ async function getHeroImage(query) {
     const data = await res.json();
     return data.urls.regular;
 }
+
+async function getRealTimeWeather(lat, lon) {
+    try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${CONFIG.OPENWEATHER_KEY}&units=metric`;
+        const res = await fetch(url);
+        return await res.json();
+    } catch (e) {
+        console.error("Weather fetch failed", e);
+        return null;
+    }
+}
