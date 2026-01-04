@@ -10,53 +10,67 @@
 </head>
 <body class="bg-slate-50 font-inter">
 
-    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-4 px-8 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-sm">
-        <div class="text-2xl font-bold text-indigo-600 font-poppins">SmartTravel</div>
+    <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 py-4 px-4 md:px-8 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="text-xl md:text-2xl font-bold text-indigo-600 font-poppins">SmartTravel</div>
         <ul class="hidden md:flex space-x-8 font-semibold text-slate-700">
             <li><a href="#home" class="hover:text-indigo-600 transition">Home</a></li>
             <li><a href="about.html" class="hover:text-indigo-600 transition">About</a></li>
             <li><a href="contact.html" class="hover:text-indigo-600 transition">Contact</a></li>
         </ul>
-        <button class="bg-indigo-600 text-white px-6 py-2 rounded-full hover:bg-indigo-700 transition shadow-lg">Get Started</button>
+        <button class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition shadow-lg text-sm md:text-base">Get Started</button>
     </nav>
 
-    <header id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+    <header id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
         <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/80 to-purple-900/80 z-10"></div>
         <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1600&q=80" class="absolute inset-0 w-full h-full object-cover" alt="Travel Background">
         
-        <div class="relative z-20 text-center text-white px-4 w-full max-w-5xl">
-            <h1 class="text-5xl md:text-7xl font-poppins font-bold mb-6 drop-shadow-lg">
+        <div class="relative z-20 text-center text-white px-4 w-full max-w-6xl">
+            <h1 class="text-3xl md:text-5xl lg:text-7xl font-poppins font-bold mb-6 drop-shadow-lg">
                 Your AI-Powered <span class="text-indigo-400">Journey</span> Begins
             </h1>
-            <p class="text-xl md:text-2xl mb-10 max-w-2xl mx-auto text-slate-200">
-                Tell us your preferences, and we'll build your perfect roadmap.
+            <p class="text-base md:text-xl mb-10 max-w-2xl mx-auto text-slate-200">
+                Tell us your preferences, and we'll build your perfect multi-day roadmap.
             </p>
 
-            <div class="bg-white p-4 rounded-[2.5rem] shadow-2xl flex flex-col lg:flex-row gap-4 items-center">
-                <div class="flex-1 w-full px-6 py-2 text-left border-r border-slate-100">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destination</label>
-                    <input type="text" id="citySearch" placeholder="e.g., Paris" class="w-full text-slate-800 focus:outline-none font-semibold text-lg">
-                </div>
-                
-                <div class="flex-1 w-full px-6 py-2 text-left border-r border-slate-100">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Budget</label>
-                    <select id="budgetLevel" class="w-full text-slate-800 focus:outline-none font-semibold bg-transparent cursor-pointer">
-                        <option value="budget">Budget-Friendly</option>
-                        <option value="mid" selected>Mid-Range</option>
-                        <option value="luxury">Luxury</option>
-                    </select>
+            <div class="bg-white p-4 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] shadow-2xl flex flex-col gap-4 w-full max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 w-full">
+                    <div class="flex-1 px-4 py-2 text-left border-b lg:border-b-0 lg:border-r border-slate-100">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Destination</label>
+                        <input type="text" id="citySearch" placeholder="e.g., Paris" class="w-full text-slate-800 focus:outline-none font-semibold text-lg bg-transparent">
+                    </div>
+                    
+                    <div class="flex flex-row border-b lg:border-b-0 lg:border-r border-slate-100">
+                        <div class="flex-1 px-4 py-2 text-left border-r border-slate-50">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Start Date</label>
+                            <input type="date" id="startDate" class="w-full text-slate-700 focus:outline-none font-semibold text-sm cursor-pointer bg-transparent">
+                        </div>
+                        <div class="flex-1 px-4 py-2 text-left">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">End Date</label>
+                            <input type="date" id="endDate" class="w-full text-slate-700 focus:outline-none font-semibold text-sm cursor-pointer bg-transparent">
+                        </div>
+                    </div>
+
+                    <div class="flex flex-row">
+                        <div class="flex-1 px-4 py-2 text-left border-r border-slate-50">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Budget</label>
+                            <select id="budgetLevel" class="w-full text-slate-800 focus:outline-none font-semibold bg-transparent cursor-pointer text-sm">
+                                <option value="budget">Budget</option>
+                                <option value="mid" selected>Mid-Range</option>
+                                <option value="luxury">Luxury</option>
+                            </select>
+                        </div>
+                        <div class="flex-1 px-4 py-2 text-left">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pace</label>
+                            <select id="travelPace" class="w-full text-slate-800 focus:outline-none font-semibold bg-transparent cursor-pointer text-sm">
+                                <option value="2">Relaxed</option>
+                                <option value="4" selected>Balanced</option>
+                                <option value="6">Intense</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex-1 w-full px-6 py-2 text-left border-r border-slate-100">
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Pace</label>
-                    <select id="travelPace" class="w-full text-slate-800 focus:outline-none font-semibold bg-transparent cursor-pointer">
-                        <option value="2">Relaxed (2/day)</option>
-                        <option value="4" selected>Balanced (4/day)</option>
-                        <option value="6">Intense (6/day)</option>
-                    </select>
-                </div>
-
-                <button onclick="startPlanning()" class="w-full lg:w-auto bg-indigo-600 text-white px-10 py-5 rounded-[2rem] font-bold hover:bg-indigo-500 transition-all shadow-xl">
+                <button onclick="startPlanning()" class="w-full bg-indigo-600 text-white py-4 rounded-xl md:rounded-[2rem] font-bold hover:bg-indigo-500 transition-all shadow-xl">
                     Generate Plan
                 </button>
             </div>
@@ -64,9 +78,17 @@
     </header>
 
     <footer class="bg-slate-900 text-white py-12 px-8 text-center">
-        <p>© 2026 SmartTravel Planner. All rights reserved.</p>
+        <p class="text-sm opacity-70">© 2026 SmartTravel Planner. All rights reserved.</p>
     </footer>
 
     <script src="js/main.js"></script>
+    <script>
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('startDate').setAttribute('min', today);
+        document.getElementById('endDate').setAttribute('min', today);
+        document.getElementById('startDate').addEventListener('change', function() {
+            document.getElementById('endDate').setAttribute('min', this.value);
+        });
+    </script>
 </body>
 </html>

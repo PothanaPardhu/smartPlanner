@@ -30,3 +30,37 @@ window.addEventListener('scroll', () => {
         nav.classList.add('py-4', 'bg-white/80');
     }
 });
+
+async function startPlanning() {
+    const city = document.getElementById('citySearch').value;
+    const startVal = document.getElementById('startDate').value;
+    const endVal = document.getElementById('endDate').value;
+    const budget = document.getElementById('budgetLevel').value;
+    const pace = document.getElementById('travelPace').value;
+    
+    if (!city || !startVal || !endVal) {
+        alert("Please fill in destination and both dates!");
+        return;
+    }
+
+    const start = new Date(startVal);
+    const end = new Date(endVal);
+    
+    // Calculate total days (e.g., Jan 1 to Jan 3 is 3 days)
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+    if (diffDays <= 0) {
+        alert("End date must be after start date!");
+        return;
+    }
+
+    const params = new URLSearchParams({
+        city: city,
+        budget: budget,
+        pace: pace,
+        duration: diffDays
+    });
+
+    window.location.href = `planner.html?${params.toString()}`;
+}

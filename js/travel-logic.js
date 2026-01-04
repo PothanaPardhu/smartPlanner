@@ -13,68 +13,64 @@ async function getAmadeusToken() {
 }
 
 async function getCityData(searchQuery) {
-    // 1. Get Lat/Lon from Amadeus (Supports City, Airport, or District)
     const geoUrl = `https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY,AIRPORT&keyword=${encodeURIComponent(searchQuery)}`;
-    const geoRes = await fetch(geoUrl, {
-        headers: { "Authorization": `Bearer ${amadeusToken}` }
-    });
+    const geoRes = await fetch(geoUrl, { headers: { "Authorization": `Bearer ${amadeusToken}` } });
     const geoData = await geoRes.json();
     
-    if (!geoData.data || geoData.data.length === 0) {
-        throw new Error("Location not found. Try a broader city name.");
-    }
-    
+    if (!geoData.data || geoData.data.length === 0) throw new Error("Location not found.");
     const { latitude, longitude } = geoData.data[0].geoCode;
 
-    // 2. Fetch Real-Time Landmarks from OpenStreetMap (Overpass API)
-    // This query looks for 'tourism' spots (museums, monuments, etc.)
+    // PRODUCTION-LEVEL QUERY: Fetches landmarks, historic sites, and attractions
     const osmQuery = `
-        [out:json];
-        node["tourism"](around:5000, ${latitude}, ${longitude});
-        out 15;
+        [out:json][timeout:25];
+        (
+          nwr["tourism"~"museum|monument|viewpoint|attraction|theme_park"](around:10000, ${latitude}, ${longitude});
+          nwr["historic"~"castle|ruins|monument|fort"](around:10000, ${latitude}, ${longitude});
+        );
+        out center 60; 
     `;
     const osmUrl = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(osmQuery)}`;
     
     try {
         const osmRes = await fetch(osmUrl);
+        const contentType = osmRes.headers.get("content-type");
+        if (!osmRes.ok || !contentType || !contentType.includes("application/json")) {
+            return { lat: latitude, lon: longitude, pois: [] };
+        }
+
         const osmData = await osmRes.json();
+        const realPois = (osmData.elements || []).map(item => {
+            const tags = item.tags || {};
+            const lat = item.lat || (item.center ? item.center.lat : latitude);
+            const lon = item.lon || (item.center ? item.center.lon : longitude);
+            
+            const cat = (tags.tourism || tags.historic || "Sightseeing").toUpperCase();
+            // PRODUCTION FEATURE: Assign realistic entrance fee estimates
+            let fee = 10;
+            if (cat.includes("MUSEUM")) fee = 15;
+            else if (cat.includes("CASTLE") || cat.includes("FORT")) fee = 20;
+            else if (cat.includes("VIEWPOINT")) fee = 5;
 
-        // Transform OSM data into our card format
-        const realPois = osmData.elements.map(item => ({
-            name: item.tags.name || "Historic Landmark",
-            category: (item.tags.tourism || "Sightseeing").toUpperCase(),
-            geoCode: {
-                latitude: item.lat,
-                longitude: item.lon
-            }
-        }));
+            return {
+                name: tags.name || "Historical Monument",
+                category: cat,
+                entranceFee: fee,
+                geoCode: { latitude: lat, longitude: lon }
+            };
+        });
 
-        return {
-            lat: latitude,
-            lon: longitude,
-            pois: realPois.length > 0 ? realPois : []
-        };
+        return { lat: latitude, lon: longitude, pois: realPois };
     } catch (e) {
-        console.error("OSM failed, returning empty POIs");
+        console.error("OSM fetch failed:", e);
         return { lat: latitude, lon: longitude, pois: [] };
     }
-}
-
-async function getHeroImage(query) {
-    const url = `https://api.unsplash.com/photos/random?query=${query}&orientation=landscape&client_id=${CONFIG.UNSPLASH_KEY}`;
-    const res = await fetch(url);
-    if (!res.ok) return 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800';
-    const data = await res.json();
-    return data.urls.regular;
 }
 
 async function getRealTimeWeather(lat, lon) {
     try {
         const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${CONFIG.OPENWEATHER_KEY}&units=metric`;
         const res = await fetch(url);
+        if (!res.ok) return null;
         return await res.json();
-    } catch (e) {
-        console.error("Weather fetch failed", e);
-        return null;
-    }
+    } catch (e) { return null; }
 }

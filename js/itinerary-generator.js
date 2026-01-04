@@ -1,42 +1,56 @@
 // js/itinerary-generator.js
 
-/**
- * Logic to group POIs into specific days and time slots
- */
 function generateSmartItinerary(pois, pace) {
     const days = [];
     const spotsPerDay = parseInt(pace) || 4;
     
-    // Split the markers into chunks (Days)
-    for (let i = 0; i < pois.length; i += spotsPerDay) {
-        const daySpots = pois.slice(i, i + spotsPerDay);
+    // Sort so "Famous" items (Museums/Castles) appear first in the plan
+    const sortedPois = [...pois].sort((a, b) => {
+        const highValue = ["MUSEUM", "CASTLE", "FORT", "MONUMENT"];
+        const aVal = highValue.some(el => a.category.includes(el)) ? 1 : 0;
+        const bVal = highValue.some(el => b.category.includes(el)) ? 1 : 0;
+        return bVal - aVal;
+    });
+
+    for (let i = 0; i < sortedPois.length; i += spotsPerDay) {
+        const daySpots = sortedPois.slice(i, i + spotsPerDay);
         
-        const structuredDay = daySpots.map((spot, index) => {
-            let slot = "Morning";
-            if (index >= spotsPerDay / 2) slot = "Afternoon";
-            if (index >= (spotsPerDay * 0.75)) slot = "Evening";
-            
-            return {
-                ...spot,
-                timeSlot: slot,
-                duration: "2-3 Hours"
-            };
-        });
-        
-        days.push(structuredDay);
-        if (days.length >= 7) break; // Limit to a 1-week plan
+        if (daySpots.length > 0) {
+            const structuredDay = daySpots.map((spot, index) => {
+                let slot = "Morning";
+                if (index >= spotsPerDay / 2) slot = "Afternoon";
+                if (index >= (spotsPerDay * 0.75)) slot = "Evening";
+                
+                return {
+                    ...spot,
+                    timeSlot: slot,
+                    duration: "2.5 Hours",
+                    isFamous: ["MUSEUM", "CASTLE", "MONUMENT", "FORT"].some(el => spot.category.includes(el))
+                };
+            });
+            days.push(structuredDay);
+        }
     }
-    return days;
+    return days; 
 }
 
-/**
- * Provides cultural/financial insights based on budget selection
- */
-function getBudgetEstimates(budgetLevel) {
+function getBudgetEstimates(budgetLevel, allPois) {
     const profiles = {
-        budget: { food: 30, stay: 50, total: 80 },
-        mid: { food: 70, stay: 120, total: 190 },
-        luxury: { food: 150, stay: 400, total: 550 }
+        budget: { food: 25, stay: 45, multiplier: 1 },
+        mid: { food: 60, stay: 110, multiplier: 1.5 },
+        luxury: { food: 150, stay: 400, multiplier: 3 }
     };
-    return profiles[budgetLevel] || profiles.mid;
+    const base = profiles[budgetLevel] || profiles.mid;
+    
+    // Sum entrance fees of selected spots
+    const totalEntranceFees = allPois.reduce((sum, spot) => sum + (spot.entranceFee || 0), 0);
+    // Average daily ticket spend
+    const activityDaily = Math.round((totalEntranceFees * base.multiplier) / (allPois.length / 4 || 1));
+
+    return {
+        food: base.food,
+        stay: base.stay,
+        activities: activityDaily,
+        total: (base.food + base.stay + activityDaily).toFixed(2)
+    };
 }
