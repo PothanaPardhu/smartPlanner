@@ -1,5 +1,10 @@
 // js/travel-logic.js
+// At the top of travel-logic.js
+if (!CONFIG.AMADEUS_ID) {
+    console.error("API Keys are missing! Check your config settings.");
+}
 let amadeusToken = '';
+
 
 async function getAmadeusToken() {
     const url = "https://test.api.amadeus.com/v1/security/oauth2/token";
