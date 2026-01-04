@@ -1,0 +1,28 @@
+/* Custom CSS Variables for Rich UI Colors */
+:root {
+    --primary-color: #4f46e5;   /* Indigo 600 */
+    --secondary-color: #8b5cf6; /* Purple 500 */
+}
+
+/* Typography Requirements */
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.font-inter { font-family: 'Inter', sans-serif; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Sticky Navbar Effect when Scrolling */
+.nav-scrolled {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Rich Gradient Text */
+.gradient-text {
+    background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

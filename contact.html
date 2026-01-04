@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | SmartTravel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-slate-50 font-inter">
+
+    <nav class="fixed top-0 w-full z-50 py-4 px-8 flex justify-between items-center bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="text-2xl font-bold text-indigo-600 font-poppins">SmartTravel</div>
+        <ul class="hidden md:flex space-x-8 font-semibold text-slate-700">
+            <li><a href="index.html" class="hover:text-indigo-600 transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-indigo-600 transition">About</a></li>
+            <li><a href="contact.html" class="text-indigo-600">Contact</a></li>
+        </ul>
+    </nav>
+
+    <main class="pt-32 pb-20 px-8 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100">
+            
+            <div class="bg-indigo-600 p-12 text-white flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-indigo-500 rounded-full opacity-50"></div>
+                
+                <div class="relative z-10">
+                    <h2 class="text-4xl font-poppins font-bold mb-6">Get in Touch</h2>
+                    <p class="text-indigo-100 mb-10 text-lg">Have questions about your itinerary? Our team is here to help you plan the perfect trip.</p>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-indigo-500 p-3 rounded-xl">📍</span>
+                            <span>Hanamkonda, Telangana, India</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-indigo-500 p-3 rounded-xl">📞</span>
+                            <span>+91 86399 75852</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="bg-indigo-500 p-3 rounded-xl">✉️</span>
+                            <span>support@smarttravel.com</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 rounded-2xl overflow-hidden grayscale contrast-125 opacity-80 hover:grayscale-0 transition-all duration-500 h-48 border-2 border-indigo-400">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60754.72251347078!2d79.526435!3d17.981442!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3348be389149d5%3A0x8898687a718f4ce9!2sHanamkonda%2C%20Telangana!5e0!3m2!1sen!2sin!4v1700000000000" 
+                        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                    </iframe>
+                </div>
+            </div>
+
+            <div class="p-12">
+                <form action="#" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
+                            <input type="text" placeholder="John Doe" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+                            <input type="email" placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Subject</label>
+                        <select class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition bg-white">
+                            <option>General Inquiry</option>
+                            <option>Technical Support</option>
+                            <option>Business Partnership</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Message</label>
+                        <textarea rows="5" placeholder="Tell us about your travel plans..." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-600 outline-none transition"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-300">
+                        Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer class="text-center py-8 text-slate-400 text-sm">
+        &copy; 2026 SmartTravel Planner. Built by Vanam Sathwik.
+    </footer>
+
+</body>
+</html>
