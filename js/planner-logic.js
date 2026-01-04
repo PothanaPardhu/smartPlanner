@@ -48,6 +48,24 @@ async function initPlanner() {
         } catch (wErr) {
             console.warn("Weather API currently unavailable or unauthorized.");
         }
+
+        // Inside initPlanner function in js/planner-logic.js
+
+// ... after getting data and weather ...
+
+const imageData = await getDestinationImage(city);
+const header = document.getElementById('itinerary-header');
+
+// Create a professional banner for the sidebar
+const banner = document.createElement('div');
+banner.className = "w-full h-40 rounded-3xl mb-6 overflow-hidden relative shadow-lg group";
+banner.innerHTML = `
+    <img src="${imageData.url}" class="w-full h-full object-cover transition duration-500 group-hover:scale-110">
+    <div class="absolute bottom-2 left-3 text-[9px] text-white/80 backdrop-blur-sm bg-black/20 px-2 py-1 rounded-full">
+        Photo by <a href="${imageData.profile}" target="_blank" class="underline">${imageData.photographer}</a> on <a href="https://unsplash.com" target="_blank" class="underline">Unsplash</a>
+    </div>
+`;
+header.prepend(banner);
         
         // 4. GENERATE CONTENT (Duration aware)
         const itineraryDays = generateSmartItinerary(data.pois, pace, duration);

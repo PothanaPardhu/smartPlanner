@@ -64,3 +64,29 @@ async function startPlanning() {
 
     window.location.href = `planner.html?${params.toString()}`;
 }
+
+// js/main.js
+
+// Existing startPlanning function... (keep as is)
+
+// NEW: Dynamic Background Logic
+const cityInput = document.getElementById('citySearch');
+const heroBgImage = document.querySelector('#home img');
+
+if (cityInput && heroBgImage) {
+    // We use 'blur' so the background updates when the user clicks away from the input
+    cityInput.addEventListener('blur', async () => {
+        const city = cityInput.value.trim();
+        if (city.length > 2) {
+            const imageData = await getDestinationImage(city);
+            
+            // Apply smooth fade transition
+            heroBgImage.style.opacity = '0.3';
+            setTimeout(() => {
+                heroBgImage.src = imageData.url;
+                heroBgImage.style.opacity = '1';
+                heroBgImage.style.transition = 'opacity 0.8s ease-in-out';
+            }, 300);
+        }
+    });
+}

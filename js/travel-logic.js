@@ -79,3 +79,40 @@ async function getRealTimeWeather(lat, lon) {
         return await res.json();
     } catch (e) { return null; }
 }
+
+// js/travel-logic.js
+
+// ... (Existing Amadeus and Weather code above) ...
+
+/**
+ * Fetches a high-quality landscape image of the destination city from Unsplash.
+ */
+async function getDestinationImage(city) {
+    try {
+        // Optimize query for travel landscapes
+        const query = encodeURIComponent(`${city} travel landmark landscape`);
+        const url = `https://api.unsplash.com/photos/random?query=${query}&orientation=landscape&client_id=${CONFIG.UNSPLASH_ACCESS_KEY}`;
+        
+        const response = await fetch(url);
+        if (!response.ok) throw new Error("Unsplash image fetch failed");
+        
+        const data = await response.json();
+        
+        // Return image URL and required photographer attribution
+        return {
+            url: data.urls.regular,
+            photographer: data.user.name,
+            profile: data.user.links.html,
+            unsplashLink: data.links.html
+        };
+    } catch (error) {
+        console.error("Unsplash Error:", error);
+        // High-quality fallback travel image
+        return {
+            url: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800",
+            photographer: "Unsplash",
+            profile: "https://unsplash.com",
+            unsplashLink: "https://unsplash.com"
+        };
+    }
+}
