@@ -13,13 +13,44 @@ async function getAmadeusToken() {
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `grant_type=client_credentials&client_id=${CONFIG.AMADEUS_ID}&client_secret=${CONFIG.AMADEUS_SECRET}`
     });
+
+    // always log status for debugging
+    if (!response.ok) {
+        console.error("Token request failed", response.status, await response.text());
+        throw new Error(`Amadeus token request failed (${response.status})`);
+    }
+
     const data = await response.json();
+    if (!data.access_token) {
+        console.error("No access token in Amadeus response", data);
+        throw new Error("Amadeus did not return an access token. Check your credentials.");
+    }
+
     amadeusToken = data.access_token;
 }
 
 async function getCityData(searchQuery) {
     const geoUrl = `https://test.api.amadeus.com/v1/reference-data/locations?subType=CITY,AIRPORT&keyword=${encodeURIComponent(searchQuery)}`;
-    const geoRes = await fetch(geoUrl, { headers: { "Authorization": `Bearer ${amadeusToken}` } });
+
+    let geoRes = await fetch(geoUrl, { headers: { "Authorization": `Bearer ${amadeusToken}` } });
+
+    // if the token expired or is invalid, try fetching a new one once
+    if (geoRes.status === 401) {
+        console.warn("Amadeus token unauthorized, refreshing token and retrying...");
+        await getAmadeusToken();
+        geoRes = await fetch(geoUrl, { headers: { "Authorization": `Bearer ${amadeusToken}` } });
+    }
+
+    if (!geoRes.ok) {
+        // 500 or other server error
+        const text = await geoRes.text();
+        console.error("Error fetching city data", geoRes.status, text);
+        if (geoRes.status === 401) {
+            throw new Error("Unauthorized - check your Amadeus API key/secret (likely expired or invalid).");
+        }
+        throw new Error(`Amadeus city API returned status ${geoRes.status}`);
+    }
+
     const geoData = await geoRes.json();
     
     if (!geoData.data || geoData.data.length === 0) throw new Error("Location not found.");

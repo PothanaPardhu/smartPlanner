@@ -80,7 +80,7 @@ header.prepend(banner);
         document.getElementById('itinerary-list').innerHTML = `
             <div class="p-10 text-center text-slate-500">
                 <p class="text-red-500 font-bold mb-2">Location Fetch Failed</p>
-                <p class="text-xs">We couldn't find "${city}". Please check your API keys or try a major city name.</p>
+                <p class="text-xs">We couldn't find "${city}". This often happens when the Amadeus credentials are invalid or expired. Please verify your API key/secret in <code>api-config.js</code> or try a different city.</p>
                 <a href="index.html" class="inline-block mt-4 text-indigo-600 font-bold underline">Try Again</a>
             </div>`;
     }
